@@ -32,6 +32,16 @@ Un même modèle peut porter **deux voix** (`fr_FR-upmc-medium` contient Jessica
 et Pierre) : la clé d'une voix est `<pack>#<locuteur>`, un seul téléchargement
 sert les deux.
 
+## Deux sources de modèles
+
+Par défaut un paquet vient des publications de **sherpa-onnx**, qui republie les
+voix Piper avec leurs jetons et les données de prononciation. Son catalogue ne
+couvre pas tout Piper : une voix absente de chez lui se déclare
+`"source": "piper"`, et le script descend alors le modèle chez Piper et fabrique
+lui-même le `tokens.txt` depuis la table de phonèmes du JSON. C'est ce qui rend
+`es_ES-mls_9972` — la seconde voix féminine espagnole — atteignable si l'écoute
+la retient.
+
 ## Fabriquer et publier
 
 ```bash

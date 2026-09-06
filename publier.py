@@ -160,6 +160,40 @@ def verifier_pack(pack: dict) -> dict:
     return config
 
 
+def jetons_depuis_piper(config: dict, sortie: Path) -> Path:
+    """Ecrit le `tokens.txt` que sherpa-onnx attend, depuis le JSON du modele.
+
+    Piper range sa correspondance phoneme -> identifiant dans la configuration
+    du modele ; sherpa-onnx la veut en texte, un phoneme par ligne. Le
+    separateur est une ESPACE, y compris quand le phoneme EST une espace : la
+    ligne s'ecrit donc telle quelle, sans nettoyage.
+
+    CE QUE CELA DEBLOQUE : les voix que sherpa-onnx ne republie pas. Son
+    catalogue d'archives ne couvre pas tout Piper -- `es_ES-mls_9972`, la
+    seconde voix feminine espagnole, n'y est pas. Avec ce chemin, le catalogue
+    ne depend plus que de Piper.
+    """
+    with open(sortie, "w", encoding="utf-8", newline="\n") as f:
+        for phoneme, ids in config["phoneme_id_map"].items():
+            f.write(f"{phoneme} {ids[0]}\n")
+    return sortie
+
+
+def extraire_depuis_piper(pack: dict, config: dict) -> tuple[Path, Path]:
+    """Descend le modele chez Piper et fabrique ses jetons.
+
+    Pas de donnees de prononciation par ce chemin : elles sont les memes pour
+    toutes les voix, et viennent d'un paquet sherpa.
+    """
+    dossier = TRAVAIL / pack["id"]
+    dossier.mkdir(parents=True, exist_ok=True)
+    modele = telecharger(
+        f"{PIPER}/{pack['piper']}/{pack['id']}.onnx", dossier / f"{pack['id']}.onnx"
+    )
+    tokens = jetons_depuis_piper(config, dossier / "tokens.txt")
+    return modele, tokens
+
+
 def extraire_pack(pack: dict) -> tuple[Path, Path]:
     """Descend l'archive sherpa-onnx et rend (modele, tokens)."""
     nom = f"vits-piper-{pack['id']}"
@@ -287,23 +321,36 @@ def preparer(catalogue: dict, avec_extraits: bool = True) -> Path:
     SORTIE.mkdir(exist_ok=True)
     TRAVAIL.mkdir(exist_ok=True)
     espeak_zip: Path | None = None
+    espeak: Path | None = None
     entrees: list[dict] = []
 
     for pack in catalogue["packs"]:
         print(f"\n{pack['id']}")
         config = verifier_pack(pack)
-        modele, tokens = extraire_pack(pack)
+        if pack.get("source") == "piper":
+            modele, tokens = extraire_depuis_piper(pack, config)
+        else:
+            modele, tokens = extraire_pack(pack)
 
         publie = SORTIE / f"{pack['id']}.onnx"
         if not publie.exists():
             shutil.copy2(modele, publie)
         shutil.copy2(tokens, SORTIE / f"{pack['id']}.tokens.txt")
 
-        espeak = modele.parent / "espeak-ng-data"
-        if not espeak.is_dir():
-            raise SystemExit(f"{pack['id']} : espeak-ng-data absent de l'archive.")
-        if espeak_zip is None:
-            espeak_zip = zipper_espeak(espeak)
+        # Les donnees de prononciation sont les MEMES pour toutes les voix
+        # Piper : on les prend dans le premier paquet sherpa rencontre, et on
+        # les garde pour ceux qui viennent de chez Piper, qui ne les portent
+        # pas. Il en faut donc au moins un dans le catalogue.
+        trouvee = modele.parent / "espeak-ng-data"
+        if trouvee.is_dir():
+            espeak = trouvee
+            if espeak_zip is None:
+                espeak_zip = zipper_espeak(espeak)
+        if espeak is None:
+            raise SystemExit(
+                f"{pack['id']} : pas de donnees de prononciation. "
+                "Placez au moins un paquet de source sherpa avant celui-ci."
+            )
         if avec_extraits:
             rendre_extraits(pack, publie, tokens, espeak, catalogue["extraits"])
 
