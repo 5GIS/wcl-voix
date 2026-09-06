@@ -45,6 +45,7 @@ import shutil
 import subprocess
 import sys
 import tarfile
+import time
 import urllib.error
 import urllib.request
 import zipfile
@@ -91,8 +92,36 @@ def telecharger(url: str, cible: Path, essais: int = 4) -> Path:
 
 
 def lire_texte(url: str) -> str:
-    with urllib.request.urlopen(url, timeout=60) as rep:
-        return rep.read().decode("utf-8", "replace")
+    """Lit une petite page amont, une seule fois par execution.
+
+    HUGGING FACE COMPTE LES APPELS ANONYMES. Verifier dix paquets demande
+    vingt lectures (le MODEL_CARD et la configuration de chacun), et le job
+    les fait deux fois : une pour la verification, une pour la fabrication.
+    La quarantieme est revenue en `429 Too Many Requests`, et la publication
+    s'est arretee apres huit paquets.
+
+    Deux reponses, dans cet ordre : on garde ce qu'on a deja lu -- les deux
+    passes du meme job partagent le meme dossier --, et l'on attend quand on
+    nous le demande, de plus en plus longtemps.
+    """
+    cache = TRAVAIL / "amont" / (hashlib.sha256(url.encode()).hexdigest() + ".txt")
+    if cache.exists():
+        return cache.read_text(encoding="utf-8")
+    cache.parent.mkdir(parents=True, exist_ok=True)
+    attente = 5
+    for essai in range(1, 6):
+        try:
+            with urllib.request.urlopen(url, timeout=60) as rep:
+                texte = rep.read().decode("utf-8", "replace")
+            cache.write_text(texte, encoding="utf-8")
+            return texte
+        except urllib.error.HTTPError as e:
+            if e.code not in (429, 503) or essai == 5:
+                raise
+            print(f"  {e.code} sur {url} : on attend {attente} s")
+            time.sleep(attente)
+            attente *= 3
+    raise RuntimeError(f"lecture impossible : {url}")
 
 
 def verifier_pack(pack: dict) -> dict:
@@ -352,6 +381,7 @@ def main() -> int:
         return 2
 
     catalogue = lire_catalogue()
+    TRAVAIL.mkdir(exist_ok=True)
     if args.verifier:
         print("Licences et locuteurs, lus en amont :\n")
         for pack in catalogue["packs"]:
