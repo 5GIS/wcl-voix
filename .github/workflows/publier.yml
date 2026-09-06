@@ -1,0 +1,60 @@
+name: Publier les voix
+
+# RIEN NE PART TOUT SEUL. Publier, c'est envoyer 700 Mo de modeles dans une
+# publication publique que l'application de tous les lecteurs interroge : cela
+# se declenche a la main, et la verification des licences tourne d'abord.
+on:
+  workflow_dispatch:
+    inputs:
+      publier:
+        description: "Envoyer dans la publication v1 (sinon : verification seule)"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+jobs:
+  voix:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      # Le meme moteur que l'application, pour que l'extrait qu'on ecoute
+      # AVANT de telecharger soit exactement ce qu'on entendra apres.
+      - name: Installer sherpa-onnx
+        run: |
+          python -m pip install --upgrade pip
+          pip install sherpa-onnx
+          python -c "import sherpa_onnx; print('sherpa-onnx', sherpa_onnx.__version__ if hasattr(sherpa_onnx,'__version__') else '(version non exposee)')"
+
+      # Les licences d'abord : une voix non commerciale ou AGPL arrete tout,
+      # avant le moindre telechargement.
+      - name: Verifier les licences et les locuteurs
+        run: python publier.py --verifier
+
+      - name: Fabriquer les paquets et les extraits
+        run: python publier.py --preparer
+
+      - name: Publier dans v1
+        if: ${{ inputs.publier }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python publier.py --publier
+
+      # Sans publication, on garde de quoi ecouter : les extraits et le
+      # manifeste, sans les modeles, tiennent dans un artefact.
+      - name: Garder les extraits a ecouter
+        uses: actions/upload-artifact@v4
+        with:
+          name: extraits
+          path: |
+            sortie/*.wav
+            sortie/manifest.json
+            NOTES_PUBLICATION.md
+          if-no-files-found: error

@@ -1,0 +1,128 @@
+{
+  "_lisez_moi": [
+    "LE CATALOGUE DES VOIX WCL, ecrit a la main ; tout le reste se mesure.",
+    "Les poids et les empreintes ne sont PAS ici : `publier.py` les calcule sur",
+    "les fichiers reellement publies, et les ecrit dans manifest.json.",
+    "",
+    "`licence_amont` est la ligne « * License: » du MODEL_CARD de piper, copiee",
+    "telle quelle. `publier.py` la relit a chaque publication et s'arrete si",
+    "elle a change : une licence qui bouge en amont ne doit pas passer",
+    "inapercue dans une application payante.",
+    "",
+    "QUATRE VOIX PAR LANGUE, DEUX FEMININES ET DEUX MASCULINES -- sauf en",
+    "espagnol, ou une seule voix feminine passe la verification de licence.",
+    "Ce manque etait annonce dans le plan ; il se comble soit par mls_9972",
+    "(CC-BY 4.0, mais basse qualite et 16 kHz), soit par Kokoro, et cela se",
+    "tranche a l'oreille, pas ici."
+  ],
+  "extraits": {
+    "fr": "La lecture est une conversation avec quelqu'un qui n'est plus là. On ouvre un livre comme on ouvre une porte.",
+    "en": "Reading is a conversation with someone who is no longer here. We open a book the way we open a door.",
+    "es": "La lectura es una conversación con alguien que ya no está. Abrimos un libro como se abre una puerta."
+  },
+  "packs": [
+    {
+      "id": "fr_FR-siwis-medium",
+      "langue": "fr",
+      "qualite": "medium",
+      "piper": "fr/fr_FR/siwis/medium",
+      "licence": "CC-BY 4.0",
+      "licence_amont": "* License: CC-BY 4.0",
+      "jeu_de_donnees": "https://datashare.is.ed.ac.uk/handle/10283/2353",
+      "voix": [{ "locuteur": 0, "nom": "Siwis", "genre": "f" }]
+    },
+    {
+      "id": "fr_FR-upmc-medium",
+      "langue": "fr",
+      "qualite": "medium",
+      "piper": "fr/fr_FR/upmc/medium",
+      "licence": "CC-BY-SA 4.0",
+      "licence_amont": "* License: http://creativecommons.org/licenses/by-sa/4.0/",
+      "jeu_de_donnees": "https://github.com/marytts/upmc-pierre-data",
+      "voix": [
+        { "locuteur": 0, "nom": "Jessica", "genre": "f" },
+        { "locuteur": 1, "nom": "Pierre", "genre": "m" }
+      ]
+    },
+    {
+      "id": "fr_FR-gilles-low",
+      "langue": "fr",
+      "qualite": "low",
+      "piper": "fr/fr_FR/gilles/low",
+      "licence": "CC0",
+      "licence_amont": "* License: CC0",
+      "jeu_de_donnees": "https://huggingface.co/datasets/rhasspy/piper-checkpoints",
+      "voix": [{ "locuteur": 0, "nom": "Gilles", "genre": "m" }]
+    },
+    {
+      "id": "en_US-kristin-medium",
+      "langue": "en",
+      "qualite": "medium",
+      "piper": "en/en_US/kristin/medium",
+      "licence": "Domaine public",
+      "licence_amont": "* License: public domain",
+      "jeu_de_donnees": "https://huggingface.co/datasets/rhasspy/piper-checkpoints",
+      "voix": [{ "locuteur": 0, "nom": "Kristin", "genre": "f" }]
+    },
+    {
+      "id": "en_GB-alba-medium",
+      "langue": "en",
+      "qualite": "medium",
+      "piper": "en/en_GB/alba/medium",
+      "licence": "CC-BY 4.0",
+      "licence_amont": "* License: https://creativecommons.org/licenses/by/4.0/",
+      "jeu_de_donnees": "https://huggingface.co/datasets/rhasspy/piper-checkpoints",
+      "voix": [{ "locuteur": 0, "nom": "Alba (GB)", "genre": "f" }]
+    },
+    {
+      "id": "en_US-joe-medium",
+      "langue": "en",
+      "qualite": "medium",
+      "piper": "en/en_US/joe/medium",
+      "licence": "CC0",
+      "licence_amont": "* License: CC0",
+      "jeu_de_donnees": "https://huggingface.co/datasets/rhasspy/piper-checkpoints",
+      "voix": [{ "locuteur": 0, "nom": "Joe", "genre": "m" }]
+    },
+    {
+      "id": "en_US-john-medium",
+      "langue": "en",
+      "qualite": "medium",
+      "piper": "en/en_US/john/medium",
+      "licence": "Domaine public",
+      "licence_amont": "* License: public domain",
+      "jeu_de_donnees": "https://huggingface.co/datasets/rhasspy/piper-checkpoints",
+      "voix": [{ "locuteur": 0, "nom": "John", "genre": "m" }]
+    },
+    {
+      "id": "es_ES-sharvard-medium",
+      "langue": "es",
+      "qualite": "medium",
+      "piper": "es/es_ES/sharvard/medium",
+      "licence": "CC-BY 3.0",
+      "licence_amont": "* License: http://creativecommons.org/licenses/by/3.0/",
+      "jeu_de_donnees": "https://datashare.ed.ac.uk/handle/10283/574",
+      "voix": [{ "locuteur": 1, "nom": "Sharvard", "genre": "f" }]
+    },
+    {
+      "id": "es_ES-davefx-medium",
+      "langue": "es",
+      "qualite": "medium",
+      "piper": "es/es_ES/davefx/medium",
+      "licence": "CC0",
+      "licence_amont": "* License: CC0",
+      "jeu_de_donnees": "https://github.com/OHF-Voice/voice-datasets",
+      "voix": [{ "locuteur": 0, "nom": "DaveFX", "genre": "m" }]
+    },
+    {
+      "id": "es_MX-claude-high",
+      "langue": "es",
+      "qualite": "high",
+      "piper": "es/es_MX/claude/high",
+      "licence": "Apache 2.0",
+      "licence_amont": "* License: apache-2.0",
+      "jeu_de_donnees": "https://huggingface.co/datasets/rhasspy/piper-checkpoints",
+      "voix": [{ "locuteur": 0, "nom": "Claude (MX)", "genre": "m" }]
+    }
+  ]
+}
