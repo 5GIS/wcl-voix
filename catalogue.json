@@ -11,6 +11,11 @@
     "",
     "QUATRE VOIX PAR LANGUE, DEUX FEMININES ET DEUX MASCULINES -- sauf en",
     "espagnol, ou une seule voix feminine passe la verification de licence.",
+    "",
+    "EN ANGLAIS, UNE VOIX AMERICAINE ET UNE BRITANNIQUE PAR SEXE. L accent",
+    "n est pas un detail pour qui ecoute un chapitre entier, et nos lecteurs",
+    "sont des deux cotes. La region se lit sur le nom de chaque voix, pas",
+    "seulement sur celles qui detonnent.",
     "Ce manque etait annonce dans le plan ; il se comble soit par mls_9972",
     "(CC-BY 4.0, mais basse qualite et 16 kHz), soit par Kokoro, et cela se",
     "tranche a l'oreille, pas ici."
@@ -62,7 +67,7 @@
       "licence": "Domaine public",
       "licence_amont": "* License: public domain",
       "jeu_de_donnees": "https://huggingface.co/datasets/rhasspy/piper-checkpoints",
-      "voix": [{ "locuteur": 0, "nom": "Kristin", "genre": "f" }]
+      "voix": [{ "locuteur": 0, "nom": "Kristin (US)", "genre": "f" }]
     },
     {
       "id": "en_GB-alba-medium",
@@ -82,17 +87,17 @@
       "licence": "CC0",
       "licence_amont": "* License: CC0",
       "jeu_de_donnees": "https://huggingface.co/datasets/rhasspy/piper-checkpoints",
-      "voix": [{ "locuteur": 0, "nom": "Joe", "genre": "m" }]
+      "voix": [{ "locuteur": 0, "nom": "Joe (US)", "genre": "m" }]
     },
     {
-      "id": "en_US-john-medium",
+      "id": "en_GB-northern_english_male-medium",
       "langue": "en",
       "qualite": "medium",
-      "piper": "en/en_US/john/medium",
-      "licence": "Domaine public",
-      "licence_amont": "* License: public domain",
-      "jeu_de_donnees": "https://huggingface.co/datasets/rhasspy/piper-checkpoints",
-      "voix": [{ "locuteur": 0, "nom": "John", "genre": "m" }]
+      "piper": "en/en_GB/northern_english_male/medium",
+      "licence": "CC-BY-SA 4.0",
+      "licence_amont": "* License: CC-BY-SA 4.0 International",
+      "jeu_de_donnees": "http://www.openslr.org/83/",
+      "voix": [{ "locuteur": 0, "nom": "Northern (GB)", "genre": "m" }]
     },
     {
       "id": "es_ES-sharvard-medium",
